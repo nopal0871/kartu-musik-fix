@@ -35,7 +35,7 @@ jobs:
           INSTALL_TOOLS: "1"
 
       - name: Unggah artefak Pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
