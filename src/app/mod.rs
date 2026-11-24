@@ -368,7 +368,10 @@ fn build_catalog(app: &Shared) {
         let _ = host.append_child(&btn);
         let id = m.id;
         let a = app.clone();
-        dom::listen(&btn, "click", move |_| set_template(&a, id));
+        dom::listen(&btn, "click", move |_| {
+            set_template(&a, id);
+            dom::set_hidden("templateSheet", true);
+        });
         let ctx = dom::context_2d(&cv, false);
         thumbs.push(Thumb {
             id: m.id,
