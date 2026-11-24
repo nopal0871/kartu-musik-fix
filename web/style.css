@@ -164,7 +164,15 @@ canvas.stage{
 #cvPlayer{cursor:default}
 
 /* ===== Katalog template ===== */
-.catalog{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px;margin-top:12px}
+.template-trigger{width:100%;margin-top:12px}
+.template-sheet{z-index:40;padding:14px}
+.template-sheet-box{width:min(100%,900px);max-height:min(88dvh,900px);align-items:stretch;overflow:hidden}
+.template-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto}
+.template-sheet-head h3{align-self:center}
+.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:4px;overflow-y:auto;overscroll-behavior:contain;padding:2px 4px 8px 2px;min-height:0}
+@media(max-width:560px){.catalog{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tpl-card{padding:8px}}
+@media(max-width:360px){.catalog{grid-template-columns:1fr}}
+
 .tpl-card{
   display:flex;flex-direction:column;gap:8px;padding:10px;text-align:left;
   border:1.5px solid var(--line);border-radius:14px;background:var(--surface-2);
@@ -179,5 +187,4 @@ canvas.stage{
 .tpl-tags{display:flex;gap:6px;flex-wrap:wrap}
 .tpl-tag{font-size:11px;font-weight:500;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
 .tpl-card[aria-pressed="true"] .tpl-tag{border-color:var(--accent);color:var(--accent)}
-.dash.land .catalog{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
 @media (prefers-reduced-motion:no-preference){ .tpl-card{transition:border-color .15s, box-shadow .15s} }
