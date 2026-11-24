@@ -600,6 +600,8 @@ fn input_value(id: &str) -> String {
 }
 
 fn wire_dashboard(app: &Shared) {
+    listen_id("openTemplates", "click", |_| dom::set_hidden("templateSheet", false));
+    listen_id("closeTemplates", "click", |_| dom::set_hidden("templateSheet", true));
     for (id, is_title) in [("f-title", true), ("f-artist", false)] {
         let a = app.clone();
         listen_id(id, "input", move |_| {
