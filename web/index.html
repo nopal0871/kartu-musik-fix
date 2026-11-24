@@ -35,8 +35,8 @@
             <button type="button" data-orient="portrait" aria-pressed="true">Portrait 9:16</button>
             <button type="button" data-orient="landscape" aria-pressed="false">Landscape 16:9</button>
           </div>
-          <div class="catalog" id="catalog" role="group" aria-label="Katalog template"></div>
-          <p class="mini" id="tplDesc">Orientasi dan template berlaku untuk pratinjau, tampilan player, dan video hasil ekspor. Pilih template dari katalog; pratinjau tiap kartu memakai foto dan teks Anda.</p>
+          <button type="button" class="btn template-trigger" id="openTemplates">Pilih Template</button>
+          <p class="mini" id="tplDesc">Orientasi dan template berlaku untuk pratinjau, tampilan player, dan video hasil ekspor.</p>
         </div>
 
         <div class="group">
@@ -157,6 +157,16 @@
 </div>
 
 <div id="toast" role="status" aria-live="polite" hidden></div>
+
+<div class="sheet template-sheet" id="templateSheet" role="dialog" aria-modal="true" aria-labelledby="templateTitle" hidden>
+  <div class="sheet-box template-sheet-box">
+    <div class="template-sheet-head">
+      <h3 id="templateTitle">Pilih Template</h3>
+      <button type="button" class="btn" id="closeTemplates">Tutup</button>
+    </div>
+    <div class="catalog" id="catalog" role="group" aria-label="Katalog template"></div>
+  </div>
+</div>
 
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Simpan video" hidden>
   <div class="sheet-box">
