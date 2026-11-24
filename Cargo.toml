@@ -1,0 +1,38 @@
+[package]
+name = "kartu-musik"
+version = "6.0.0"
+edition = "2021"
+description = "Kartu pemutar musik (Android / iOS / Instagram) yang diekspor sebagai video, berjalan di browser lewat WebAssembly."
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+js-sys = "0.3"
+console_error_panic_hook = "0.1"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "Window", "Document", "Element", "HtmlElement", "Node", "NodeList", "EventTarget", "Event",
+  "MouseEvent", "PointerEvent", "WheelEvent", "KeyboardEvent", "DragEvent", "DataTransfer",
+  "HtmlInputElement", "HtmlSelectElement", "HtmlButtonElement", "HtmlImageElement",
+  "HtmlCanvasElement", "HtmlVideoElement", "HtmlAnchorElement", "HtmlOutputElement",
+  "HtmlMediaElement", "HtmlAudioElement", "HtmlOptionElement", "HtmlOptionsCollection", "console", "CssStyleDeclaration", "DomTokenList", "DomRect",
+  "File", "FileList", "Blob", "Url", "Performance",
+  "CanvasRenderingContext2d", "CanvasGradient", "Path2d", "ImageData", "TextMetrics",
+  "AudioContext", "AudioNode", "AudioParam", "GainNode", "AnalyserNode", "AudioDestinationNode",
+  "MediaStream", "MediaStreamTrack", "MediaStreamAudioDestinationNode",
+  "WakeLockSentinel", "Navigator", "Location",
+]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

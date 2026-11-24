@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Buat kartu pemutar musik bergaya Android, iOS, atau Instagram lalu simpan sebagai video sepanjang lagu. Berjalan sepenuhnya di browser.">
+<title>Kartu Musik iOS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%231c1c1e%27/%3E%3Cpath d=%27M13 22V10l9-2v12%27 fill=%27none%27 stroke=%27%23fff%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3Ccircle cx=%2710.5%27 cy=%2722%27 r=%272.5%27 fill=%27%23fff%27/%3E%3Ccircle cx=%2719.5%27 cy=%2720%27 r=%272.5%27 fill=%27%23fff%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Hanken+Grotesk:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Kartu Musik iOS</h1>
+      <p>Atur kartu pemutar, lalu simpan sebagai video 9:16 sepanjang lagu.</p>
+    </div>
+    <ol class="steps" aria-label="Langkah">
+      <li class="step" id="st1" aria-current="step">1 Dashboard</li>
+      <li class="step" id="st2">2 Player</li>
+    </ol>
+  </header>
+
+  <main>
+    <p id="boot" class="mini" role="status">Memuat aplikasi</p>
+
+    <section id="viewDash" class="dash" aria-label="Dashboard pengaturan" hidden>
+      <div class="panel">
+        <div class="group">
+          <h2>Template</h2>
+          <div class="seg" id="orSeg" role="group" aria-label="Orientasi template" style="margin-bottom:0">
+            <button type="button" data-orient="portrait" aria-pressed="true">Portrait 9:16</button>
+            <button type="button" data-orient="landscape" aria-pressed="false">Landscape 16:9</button>
+          </div>
+          <div class="catalog" id="catalog" role="group" aria-label="Katalog template"></div>
+          <p class="mini" id="tplDesc">Orientasi dan template berlaku untuk pratinjau, tampilan player, dan video hasil ekspor. Pilih template dari katalog; pratinjau tiap kartu memakai foto dan teks Anda.</p>
+        </div>
+
+        <div class="group">
+          <h2>Foto album</h2>
+          <button type="button" class="drop" id="artDrop">
+            <span class="thumb" id="artThumb"></span>
+            <span class="drop-txt"><strong>Pilih foto album</strong><small id="artName">Gambar contoh. Foto dengan rasio lain bisa di-crop manual.</small></span>
+          </button>
+          <input type="file" id="artFile" accept="image/*" hidden>
+          <div class="rowbtn"><button type="button" class="btn small" id="artCrop">Atur crop foto album</button></div>
+          <p class="mini" id="artNote" hidden></p>
+        </div>
+
+        <div class="group" id="grpBg">
+          <h2>Latar belakang</h2>
+          <div class="seg" id="bgSeg" role="group" aria-label="Jenis latar">
+            <button type="button" data-mode="album" aria-pressed="true">Ikuti foto album</button>
+            <button type="button" data-mode="image" aria-pressed="false">Gambar sendiri</button>
+            <button type="button" data-mode="color" aria-pressed="false">Warna</button>
+          </div>
+          <div class="subpane" id="paneImage" hidden>
+            <button type="button" class="drop" id="bgDrop">
+              <span class="thumb tall" id="bgThumb"></span>
+              <span class="drop-txt"><strong>Pilih gambar latar</strong><small id="bgName">Dipakai sebagai latar tanpa mengikuti foto album.</small></span>
+            </button>
+            <input type="file" id="bgFile" accept="image/*" hidden>
+            <div class="rowbtn" style="margin-top:0"><button type="button" class="btn small" id="bgCrop" disabled>Atur crop latar (9:16)</button></div>
+          </div>
+          <div class="fields" id="paneColor" hidden>
+            <div class="field"><label class="lbl" for="c1">Warna atas</label><input type="color" id="c1" value="#4a3a52"></div>
+            <div class="field"><label class="lbl" for="c2">Warna bawah</label><input type="color" id="c2" value="#10131a"></div>
+          </div>
+          <div class="sliders">
+            <div class="field" id="blurField">
+              <label class="lbl" for="blur">Kekuatan blur latar <output id="blurOut">60</output></label>
+              <input type="range" id="blur" min="0" max="100" step="1" value="60">
+            </div>
+            <div class="field">
+              <label class="lbl" for="dim">Gelapkan latar <output id="dimOut">20%</output></label>
+              <input type="range" id="dim" min="0" max="70" step="1" value="20">
+            </div>
+          </div>
+        </div>
+
+        <div class="group" id="grpBgLocked" hidden>
+          <h2>Latar belakang</h2>
+          <p class="mini" id="bgLockedNote" style="margin:0"></p>
+        </div>
+
+        <div class="group">
+          <h2>Info lagu</h2>
+          <div class="fields" id="songFields">
+            <div class="field"><label class="lbl" for="f-title">Nama lagu</label><input type="text" id="f-title" maxlength="80" autocomplete="off" placeholder="Judul Lagu"></div>
+            <div class="field"><label class="lbl" for="f-artist">Nama artis</label><input type="text" id="f-artist" maxlength="80" autocomplete="off" placeholder="Nama Artis"></div>
+          </div>
+          <p class="mini">Judul atau artis yang panjang bergeser otomatis seperti di iOS. Kolom tambahan menyesuaikan template yang dipilih.</p>
+        </div>
+
+        <div class="group">
+          <h2>Lagu</h2>
+          <button type="button" class="drop" id="audDrop">
+            <span class="note-ico" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>
+            </span>
+            <span class="drop-txt"><strong id="audName">Tambahkan file lagu</strong><small id="audHint">MP3, M4A, WAV, atau OGG dari perangkat Anda.</small></span>
+          </button>
+          <input type="file" id="audFile" accept="audio/*" hidden>
+          <div class="playrow">
+            <button type="button" class="btn primary" id="btnPlay"><span id="playIco" aria-hidden="true"></span><span id="playLbl">Putar</span></button>
+            <span class="clock" id="clock">Belum ada lagu</span>
+          </div>
+        </div>
+
+        <div class="group">
+          <h2>Hasil video</h2>
+          <div class="fields">
+            <div class="field"><label class="lbl" for="resSel">Resolusi</label>
+              <select id="resSel"><option value="540">540 x 960 (540p)</option><option value="720" selected>720 x 1280 (HD)</option><option value="1080">1080 x 1920 (Full HD)</option><option value="1440">1440 x 2560 (2K)</option></select></div>
+            <div class="field"><label class="lbl" for="fpsSel">Frame rate (FPS)</label>
+              <select id="fpsSel"><option value="24">24 fps</option><option value="30" selected>30 fps</option><option value="60">60 fps</option></select></div>
+            <div class="field full"><label class="lbl" for="qualSel">Kualitas</label>
+              <select id="qualSel"><option value="low">Hemat (file kecil)</option><option value="mid" selected>Seimbang</option><option value="high">Tinggi (file besar)</option></select></div>
+            <div class="field"><label class="lbl" for="fadeIn">Fade in <output id="fadeInOut">1.0 dtk</output></label>
+              <input type="range" id="fadeIn" min="0" max="5" step="0.1" value="1"></div>
+            <div class="field"><label class="lbl" for="fadeOut">Fade out <output id="fadeOutOut">1.5 dtk</output></label>
+              <input type="range" id="fadeOut" min="0" max="5" step="0.1" value="1.5"></div>
+            <div class="field full"><label class="lbl" for="fadeCol">Warna fade</label>
+              <select id="fadeCol"><option value="black" selected>Hitam</option><option value="white">Putih</option></select></div>
+          </div>
+          <p class="mini" id="durInfo">Durasi video otomatis sama dengan lagu. Tambahkan lagu untuk melihat durasinya. Fade baru terlihat di video hasil ekspor.</p>
+        </div>
+
+        <div class="cta">
+          <button type="button" class="btn primary wide" id="goPlayer">Lanjutkan ke Tampilan Player</button>
+          <p>Video direkam sepanjang lagu, dengan suara.</p>
+        </div>
+      </div>
+
+      <aside class="preview" aria-label="Pratinjau">
+        <div id="prevSlot"><canvas id="cvPreview" class="stage" width="540" height="960" aria-label="Pratinjau kartu musik" role="img"></canvas></div>
+        <p class="cap" id="capPrev">Pratinjau 9:16</p>
+      </aside>
+    </section>
+
+    <section id="viewPlayer" class="player" aria-label="Tampilan player" hidden>
+      <div class="stage-wrap" id="playSlot">
+        <canvas id="cvPlayer" class="stage" width="540" height="960" tabindex="0" role="application"
+          aria-label="Pemutar kartu musik. Spasi untuk putar atau jeda, panah kiri dan kanan untuk mundur atau maju 10 detik, panah atas dan bawah untuk volume."></canvas>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn" id="backBtn">Kembali ke dashboard</button>
+        <button type="button" class="btn primary" id="saveBtn">Simpan video 9:16</button>
+        <button type="button" class="btn" id="cancelBtn" hidden>Batalkan rekaman</button>
+      </div>
+      <p class="hint" id="playHint">Durasi video sama dengan lagu. Ekspor berjalan jauh lebih cepat dari lagunya di Chrome, Edge, dan Safari terbaru. Di browser lain video direkam real-time, jadi biarkan halaman ini terbuka sampai selesai.</p>
+    </section>
+  </main>
+</div>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Simpan video" hidden>
+  <div class="sheet-box">
+    <video id="sheetVid" controls playsinline></video>
+    <p id="sheetMsg">Tekan lama atau klik kanan video untuk menyimpan.</p>
+    <div class="row">
+      <a class="btn primary" id="sheetDl" download="kartu-musik-9x16.mp4" hidden>Unduh video</a>
+      <button type="button" class="btn" id="sheetShare" hidden>Bagikan</button>
+      <button type="button" class="btn" id="sheetClose">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet" id="cropSheet" role="dialog" aria-modal="true" aria-labelledby="cropTitle" hidden>
+  <div class="sheet-box">
+    <h3 id="cropTitle">Crop foto</h3>
+    <div class="crop-view" id="cropView"><img id="cropImg" alt="" draggable="false"><div class="crop-grid"></div></div>
+    <div class="zoomrow"><label for="cropZoom">Zoom</label><input type="range" id="cropZoom" min="1" max="4" step="0.01" value="1"></div>
+    <p>Seret foto untuk menggeser. Gunakan slider atau scroll untuk memperbesar.</p>
+    <div class="row">
+      <button type="button" class="btn" id="cropCancel">Batal</button>
+      <button type="button" class="btn primary" id="cropOk">Terapkan crop</button>
+    </div>
+  </div>
+</div>
+
+<noscript><p class="mini" style="padding:16px">Aplikasi ini membutuhkan JavaScript dan WebAssembly.</p></noscript>
+
+<!-- Muxer MP4/WebM (MIT) dimuat sebagai skrip klasik sebelum modul aplikasi -->
+<script src="vendor/mp4-muxer.js"></script>
+<script src="vendor/webm-muxer.js"></script>
+<script type="module">
+  import init from './pkg/kartu_musik.js';
+  init().then(function () {
+    var b = document.getElementById('boot'); if (b) b.remove();
+  }).catch(function (e) {
+    console.error(e);
+    var b = document.getElementById('boot');
+    if (b) b.textContent = 'Aplikasi gagal dimuat. Pastikan browser mendukung WebAssembly, lalu muat ulang halaman.';
+  });
+</script>
+</body>
+</html>
